@@ -2,8 +2,9 @@
 62.84.116.5
 
 [containers]
-10.0.0.27
+10.128.0.38
 
 [all:vars]
 ansible_connection=ssh
-ansible_ssh_user=dev 
+ansible_ssh_user=dev
+ansible_private_key_file=/home/dev/id_rsa

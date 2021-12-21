@@ -7,7 +7,12 @@
       apt:
        name: docker
        state: present
-
+       
+    - name: Install Docker.io 
+      apt:
+       name: docker.io
+       state: present
+       
     - name: Install python dependencies
       package:
         update_cache: yes 
@@ -23,24 +28,34 @@
       community.docker.docker_network:
         name: appnetwork
 
+    - name: Copy Nginx files
+      ansible.builtin.copy:
+        src: ./nginx
+        dest: /home/dev
+
+    - name: Copy Flask files
+      ansible.builtin.copy:
+        src: ./flask
+        dest: /home/dev
+
     - name: Build Nginx container 
       community.docker.docker_image:
         build: 
-          path: ./nginx
+          path: /home/dev/nginx/
         name: nginx
         source: build 
 
     - name: Build App container 
       community.docker.docker_image:
         build: 
-          path: ./flask
-        name: flaskapp
+          path: /home/dev/flask/
+        name: flask
         source: build 
     
     - name: Run App
       docker_container:
-         name: flaskapp
-         image: flaskapp:latest
+         name: flask
+         image: flask
          state: started
          exposed_ports: 5000
          networks:
@@ -49,7 +64,7 @@
     - name: Run Nginx
       docker_container:
          name: nginx
-         image: nginx:latest
+         image: nginx
          state: started
          published_ports: "80:80"
          exposed_ports: 80
