@@ -33,7 +33,7 @@
     - name: Build App container 
       community.docker.docker_image:
         build: 
-          path: ./app
+          path: ./flask
         name: flaskapp
         source: build 
     
